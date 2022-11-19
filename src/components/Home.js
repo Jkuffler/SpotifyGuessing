@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import fetchFromSpotify, { request } from '../services/api'
+import  ArtistForm  from './ArtistForm'
 
 const AUTH_ENDPOINT =
   'https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token'
@@ -68,6 +69,9 @@ const Home = () => {
           </option>
         ))}
       </select>
+        <div>
+          <ArtistForm/>
+        </div>
     </div>
   )
 }
