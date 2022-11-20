@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import fetchFromSpotify, { request } from "../services/api"
 import ArtistForm from "./ArtistForm"
 import SongForm from "./SongForm"
-import {Link, Routes, Route, useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token"
@@ -61,13 +61,14 @@ const Home = () => {
 
   const handleSubmit = event => {
     event.preventDefault();
-
+    localStorage.setItem("selectedGenre", JSON.stringify(selectedGenre))
     // 👇️ redirect to game screen
     history.push('/game');
   };
 
   return (
     <main>
+      <form onSubmit={handleSubmit}>
       <section>
         Genre:
         <select
@@ -82,7 +83,6 @@ const Home = () => {
           ))}
         </select>
       </section>
-      <form onSubmit={handleSubmit}>
         <ArtistForm />
         <SongForm />
         <br />

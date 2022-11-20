@@ -6,16 +6,16 @@ const ArtistForm = () => {
   return (
     <section>
       <h2>How many Artists?</h2>
-      <input type="radio" id="1"></input>
+      <input type="radio" name='numArtists' id="1"></input>
       <label>1</label>
 
-      <input type="radio" id="2"></input>
+      <input type="radio" name='numArtists' id="2"></input>
       <label>2</label>
 
-      <input type="radio" id="3"></input>
+      <input type="radio" name='numArtists' id="3"></input>
       <label>3</label>
 
-      <input type="radio" id="4"></input>
+      <input type="radio" name='numArtists' id="4"></input>
       <label>4</label>
     </section>
   )
