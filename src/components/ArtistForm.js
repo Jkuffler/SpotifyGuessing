@@ -8,17 +8,16 @@ const ArtistForm = () => {
       <h2>How many Arists?</h2>
 
       <input type="radio" id="1"></input>
-      <label for="1">1</label>
+      <label>1</label>
       <br />
       <input type="radio" id="2"></input>
-      <label for="2">2</label>
+      <label>2</label>
       <br />
       <input type="radio" id="3"></input>
-
-      <label for="3">3</label>
+      <label>3</label>
       <br />
       <input type="radio" id="4"></input>
-      <label for="4">4</label>
+      <label>4</label>
     </section>
   )
 }
