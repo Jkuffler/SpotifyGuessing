@@ -6,17 +6,18 @@ const SongForm = () => {
   return (
     <section>
       <h2>How many Tracks?</h2>
-
-      <input type="radio" id="1"></input>
-      <label for="1">1</label>
-      <br />
-      <input type="radio" id="2"></input>
-      <label for="2">2</label>
-      <br />
-      <input type="radio" id="3"></input>
-      <label for="3">3</label>
-      <br />
+      <form>
+        <input type="radio"  value="1"/>
+        <label>1</label>
+        <br />
+        <input type="radio" value="2"></input>
+        <label>2</label>
+        <br />
+        <input type="radio" value="3" ></input>
+        <label>3</label>
+        <br />
+      </form>
     </section>
   )
 }
-export default SongForm 
+export default SongForm

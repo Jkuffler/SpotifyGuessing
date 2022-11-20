@@ -72,12 +72,12 @@ const Home = () => {
           ))}
         </select>
       </section>
-      <section>
+      <form>
         <ArtistForm />
-      </section>
-      <section>
         <SongForm />
-      </section>
+        <br />
+        <button type="submit">P L A Y</button>
+      </form>
     </main>
   )
 }
