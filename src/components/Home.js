@@ -62,7 +62,7 @@ const Home = () => {
   const handleSubmit = event => {
     event.preventDefault();
 
-    // 👇️ redirect to /contacts
+    // 👇️ redirect to game screen
     history.push('/game');
   };
 
