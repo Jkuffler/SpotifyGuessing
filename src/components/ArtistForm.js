@@ -1,6 +1,6 @@
 import React from "react"
 /*
-This is a shared component that will be set from Home and used inside Game
+This is a shared component that will be set from Home and used to set Game via props
 */
 const ArtistForm = () => {
   return (

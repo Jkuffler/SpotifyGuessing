@@ -1,7 +1,12 @@
-import React from 'react'
+import React from "react"
 
-export const Score = () => {
+const Score = () => {
   return (
-    <div>Score</div>
+    <section id="scoreCard">
+      <h2>**GAME OVER**</h2>
+      <p id="score">Score:</p>
+      <button>R E P E A T</button>
+    </section>
   )
 }
+export default Score

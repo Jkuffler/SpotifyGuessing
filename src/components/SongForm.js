@@ -1,6 +1,6 @@
 import React from "react"
 /*
-This is a shared component between Home and Gameplay home will set/pass props based on user selections
+This is a shared component between Gameplay and Home used to set Game via props
 */
 const SongForm = () => {
   return (
