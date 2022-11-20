@@ -14,3 +14,5 @@ export const Game = () => {
     </main>
   )
 }
+
+export default Game
