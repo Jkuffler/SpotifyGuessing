@@ -5,7 +5,7 @@ This is a shared component that will be set from Home and used inside Game
 const ArtistForm = () => {
   return (
     <section>
-      <h2>How many Arists?</h2>
+      <h2>How many Artists?</h2>
       <input type="radio" id="1"></input>
       <label>1</label>
 
