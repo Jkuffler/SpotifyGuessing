@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import fetchFromSpotify, { request } from "../services/api"
 import ArtistForm from "./ArtistForm"
 import SongForm from "./SongForm"
-import { useHistory } from 'react-router-dom'
+import { useHistory } from "react-router-dom"
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token"
@@ -11,6 +11,8 @@ const TOKEN_KEY = "whos-who-access-token"
 const Home = () => {
   const [genres, setGenres] = useState([])
   const [selectedGenre, setSelectedGenre] = useState("")
+  const [artists, setArtists] = useState([])
+  const [selectedArtist, setSelectedArtist] = useState("")
   const [authLoading, setAuthLoading] = useState(false)
   const [configLoading, setConfigLoading] = useState(false)
   const [token, setToken] = useState("")
@@ -25,6 +27,21 @@ const Home = () => {
     setGenres(response.genres)
     setConfigLoading(false)
   }
+  const loadTracks = async t => {
+    const response = await fetchFromSpotify({
+      token: t,
+      endpoint: "recommendations",
+      params: {
+        market: "US",
+        seed_genres: "anime",
+        limit: 10,
+      },
+    })
+    // .then(({ artists }) => setArtists(artists))
+    setArtists(response)
+    console.log(response)
+    // setConfigLoading(false)
+  }
 
   useEffect(() => {
     setAuthLoading(true)
@@ -37,6 +54,7 @@ const Home = () => {
         setAuthLoading(false)
         setToken(storedToken.value)
         loadGenres(storedToken.value)
+        loadTracks(storedToken.value)
         return
       }
     }
@@ -50,6 +68,7 @@ const Home = () => {
       setAuthLoading(false)
       setToken(newToken.value)
       loadGenres(newToken.value)
+      loadTracks(newToken.value)
     })
   }, [])
 
@@ -57,38 +76,41 @@ const Home = () => {
     return <div>Loading...</div>
   }
 
-  const history = useHistory();
+  const history = useHistory()
 
   const handleSubmit = event => {
-    event.preventDefault();
+    event.preventDefault()
     localStorage.setItem("selectedGenre", JSON.stringify(selectedGenre))
     // 👇️ redirect to game screen
-    history.push('/game');
-  };
+    history.push("/game")
+  }
 
   return (
-    <main>
+    <div>
       <form onSubmit={handleSubmit}>
-      <section>
-        Genre:
-        <select
-          value={selectedGenre}
-          onChange={event => setSelectedGenre(event.target.value)}
-        >
-          <option value="" />
-          {genres.map(genre => (
-            <option key={genre} value={genre}>
-              {genre}
-            </option>
-          ))}
-        </select>
-      </section>
+        <div>
+          Genre:
+          <select
+            value={selectedGenre}
+            onChange={event => setSelectedGenre(event.target.value)}
+          >
+            <option value="" />
+            {genres.map(genre => (
+              <option key={genre} value={genre}>
+                {genre}
+              </option>
+            ))}
+          </select>
+        </div>
         <ArtistForm />
         <SongForm />
         <br />
-        <button type="submit">P L A Y</button>
+        <button onClick={loadTracks} type="submit">
+          P L A Y
+        </button>
       </form>
-    </main>
+      <button onClick={() => console.log(artists)}>Log</button>
+    </div>
   )
 }
 
