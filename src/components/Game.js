@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import Score from "./Score";
 import fetchFromSpotify, { request } from "../services/api";
 
-
-
 const Game = () => {
   return (
     <div>

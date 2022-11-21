@@ -11,8 +11,8 @@ const TOKEN_KEY = "whos-who-access-token";
 const Home = () => {
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState("");
-  const [topTracks, setTopTracks] = useState([]);
-  const [selectedTopTrack, setSelectedTopTrack] = useState("");
+  const [artists, setArtists] = useState([]);
+  const [selectedArtist, setSelectedArtist] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
   const [configLoading, setConfigLoading] = useState(false);
   const [token, setToken] = useState("");
@@ -27,16 +27,19 @@ const Home = () => {
     setGenres(response.genres);
     setConfigLoading(false);
   };
-
-  const loadTopTracks = async t => {
+  const loadArtists = async t => {
     setConfigLoading(true);
     const response = await fetchFromSpotify({
       token: t,
-      endpoint: "artists",
-      
-    })
-    console.log(topTracks);
-    setTopTracks(response.topTracks);
+      endpoint: "recommendations",
+      params: {
+        market: "US",
+        seed_genres: "anime",
+        limit: 10,
+      },
+    }).then(({ artists }) => setArtists(artists))
+    // console.log(artists);
+    // setArtists(response.artists);
     setConfigLoading(false);
   };
 
@@ -51,7 +54,7 @@ const Home = () => {
         setAuthLoading(false);
         setToken(storedToken.value);
         loadGenres(storedToken.value);
-        loadTopTracks(storedToken.value)
+        loadArtists(storedToken.value)
         return;
       }
     }
@@ -65,7 +68,7 @@ const Home = () => {
       setAuthLoading(false);
       setToken(newToken.value);
       loadGenres(newToken.value);
-      loadTopTracks(newToken.value)
+      loadArtists(newToken.value)
     });
   }, []);
 
@@ -77,7 +80,7 @@ const Home = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // localStorage.setItem("selectedGenre", JSON.stringify(selectedGenre));
+    localStorage.setItem("selectedGenre", JSON.stringify(selectedGenre));
     // 👇️ redirect to game screen
     history.push("/game");
   };
@@ -99,24 +102,10 @@ const Home = () => {
             ))}
           </select>
         </div>
-        <div>
-          Top Tracks:
-          <select
-            value={selectedTopTrack}
-            onChange={(event) => setSelectedTopTrack(event.target.value)}
-          >
-            <option value="" />
-            {topTracks.map((topTrack) => (
-              <option key={topTrack} value={topTrack}>
-                {topTrack}
-              </option>
-            ))}
-          </select>
-        </div>
         <ArtistForm />
         <SongForm />
         <br />
-        <button onClick={loadTopTracks}  type="submit">
+        <button onClick={loadArtists}  type="submit">
           P L A Y
         </button>
       </form>
