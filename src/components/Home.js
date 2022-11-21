@@ -11,8 +11,8 @@ const TOKEN_KEY = "whos-who-access-token"
 const Home = () => {
   const [genres, setGenres] = useState([])
   const [selectedGenre, setSelectedGenre] = useState("")
-  const [artists, setArtists] = useState([])
-  const [selectedArtist, setSelectedArtist] = useState("")
+  const [tracks, setTracks] = useState([])
+  const [selectedTrack, setSelectedTrack] = useState("")
   const [authLoading, setAuthLoading] = useState(false)
   const [configLoading, setConfigLoading] = useState(false)
   const [token, setToken] = useState("")
@@ -33,13 +33,13 @@ const Home = () => {
       endpoint: "recommendations",
       params: {
         market: "US",
-        seed_genres: "anime",
+        seed_genres: 'blues',
         limit: 10,
       },
     })
     // .then(({ artists }) => setArtists(artists))
-    setArtists(response)
-    console.log(response)
+    setTracks(response.tracks)
+    console.log(response.tracks)
     // setConfigLoading(false)
   }
 
@@ -105,11 +105,11 @@ const Home = () => {
         <ArtistForm />
         <SongForm />
         <br />
-        <button onClick={loadTracks} type="submit">
+        <button  type="submit">
           P L A Y
         </button>
       </form>
-      <button onClick={() => console.log(artists)}>Log</button>
+      <button onClick={() => console.log(tracks)}>Log</button>
     </div>
   )
 }
