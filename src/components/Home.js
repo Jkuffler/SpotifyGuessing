@@ -3,6 +3,8 @@ import fetchFromSpotify, { request } from "../services/api"
 import ArtistForm from "./ArtistForm"
 import SongForm from "./SongForm"
 import { useHistory } from "react-router-dom"
+import { useRecoilState } from "recoil"
+import { gameSongsState } from "../GlobalState"
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token"
@@ -10,12 +12,14 @@ const TOKEN_KEY = "whos-who-access-token"
 
 const Home = () => {
   const [genres, setGenres] = useState([])
-  const [selectedGenre, setSelectedGenre] = useState("")
+  const [selectedGenre, setSelectedGenre] = useState("rock")
   const [tracks, setTracks] = useState([])
   const [selectedTrack, setSelectedTrack] = useState("")
   const [authLoading, setAuthLoading] = useState(false)
   const [configLoading, setConfigLoading] = useState(false)
   const [token, setToken] = useState("")
+  const [artist, setArtist] = useState("")
+  const [artistSongs, setArtistSongs] = useRecoilState(gameSongsState)
 
   const loadGenres = async t => {
     setConfigLoading(true)
@@ -27,13 +31,20 @@ const Home = () => {
     setGenres(response.genres)
     setConfigLoading(false)
   }
+
+  const setArtistForGame = () => {
+    const artist1 = tracks[0].artists[0].id
+    loadArtistSongs(token, artist1)
+    console.log(artistSongs)
+  }
+
   const loadTracks = async t => {
     const response = await fetchFromSpotify({
       token: t,
       endpoint: "recommendations",
       params: {
         market: "US",
-        seed_genres: 'blues',
+        seed_genres: selectedGenre,
         limit: 10,
       },
     })
@@ -41,6 +52,22 @@ const Home = () => {
     setTracks(response.tracks)
     console.log(response.tracks)
     // setConfigLoading(false)
+  }
+
+  const loadArtistSongs = async (t, artist) => {
+    const response = await fetchFromSpotify({
+      token: t,
+      endpoint: `artists/${artist}/top-tracks`,
+      params: {
+        market: "US"
+      },
+    })
+    .then(response => setArtistSongs(response))
+  }
+
+  const setGameData = (t) => {
+    setTracks(loadTracks(t))
+    console.log(tracks)
   }
 
   useEffect(() => {
@@ -55,7 +82,6 @@ const Home = () => {
         setToken(storedToken.value)
         loadGenres(storedToken.value)
         loadTracks(storedToken.value)
-        return
       }
     }
     console.log("Sending request to AWS endpoint")
@@ -109,7 +135,10 @@ const Home = () => {
           P L A Y
         </button>
       </form>
-      <button onClick={() => console.log(tracks)}>Log</button>
+      <button onClick={() => console.log(selectedGenre)}>Log</button>
+      <button onClick={() => setGameData(token)}>Log Tracks</button>
+      <button onClick={() => setArtistForGame()}>Get Artist Tracks</button>
+      <button onClick={() => console.log(artistSongs)}>Log Artist Tracks</button>
     </div>
   )
 }
