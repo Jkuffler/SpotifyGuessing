@@ -1,31 +1,33 @@
-import React, { useEffect, useState } from "react"
-import fetchFromSpotify, { request } from "../services/api"
-import ArtistForm from "./ArtistForm"
-import SongForm from "./SongForm"
-import { useHistory } from "react-router-dom"
-import { useRecoilState } from "recoil"
-import { gameSongsState } from "../GlobalState"
+import React, { useEffect, useState } from 'react'
+import fetchFromSpotify, { request } from '../services/api'
+import ArtistForm from './ArtistForm'
+import SongForm from './SongForm'
+import { useHistory } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
+import { gameSongsState } from '../GlobalState'
 
 const AUTH_ENDPOINT =
-  "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token"
-const TOKEN_KEY = "whos-who-access-token"
+  'https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token'
+const TOKEN_KEY = 'whos-who-access-token'
 
 const Home = () => {
   const [genres, setGenres] = useState([])
-  const [selectedGenre, setSelectedGenre] = useState("rock")
+  const [selectedGenre, setSelectedGenre] = useState('rock')
   const [tracks, setTracks] = useState([])
-  const [selectedTrack, setSelectedTrack] = useState("")
+  const [selectedTrack, setSelectedTrack] = useState('')
   const [authLoading, setAuthLoading] = useState(false)
   const [configLoading, setConfigLoading] = useState(false)
-  const [token, setToken] = useState("")
-  const [artist, setArtist] = useState("")
+  const [token, setToken] = useState('')
+  const [artist, setArtist] = useState('')
   const [artistSongs, setArtistSongs] = useRecoilState(gameSongsState)
+  const [numSongs, setNumSongs] = useState(1)
+  const [numArtists, setNumArtists] = useState(2)
 
   const loadGenres = async t => {
     setConfigLoading(true)
     const response = await fetchFromSpotify({
       token: t,
-      endpoint: "recommendations/available-genre-seeds",
+      endpoint: 'recommendations/available-genre-seeds'
     })
     console.log(response)
     setGenres(response.genres)
@@ -41,12 +43,12 @@ const Home = () => {
   const loadTracks = async t => {
     const response = await fetchFromSpotify({
       token: t,
-      endpoint: "recommendations",
+      endpoint: 'recommendations',
       params: {
-        market: "US",
+        market: 'US',
         seed_genres: selectedGenre,
-        limit: 20,
-      },
+        limit: 20
+      }
     })
     // .then(({ artists }) => setArtists(artists))
     setTracks(response.tracks)
@@ -59,13 +61,12 @@ const Home = () => {
       token: t,
       endpoint: `artists/${artist}/top-tracks`,
       params: {
-        market: "US"
-      },
-    })
-    .then(response => setArtistSongs(response))
+        market: 'US'
+      }
+    }).then(response => setArtistSongs(response))
   }
 
-  const setGameData = (t) => {
+  const setGameData = t => {
     setTracks(loadTracks(t))
     console.log(tracks)
   }
@@ -77,18 +78,18 @@ const Home = () => {
     if (storedTokenString) {
       const storedToken = JSON.parse(storedTokenString)
       if (storedToken.expiration > Date.now()) {
-        console.log("Token found in localstorage")
+        console.log('Token found in localstorage')
         setAuthLoading(false)
         setToken(storedToken.value)
         loadGenres(storedToken.value)
         loadTracks(storedToken.value)
       }
     }
-    console.log("Sending request to AWS endpoint")
+    console.log('Sending request to AWS endpoint')
     request(AUTH_ENDPOINT).then(({ access_token, expires_in }) => {
       const newToken = {
         value: access_token,
-        expiration: Date.now() + (expires_in - 20) * 1000,
+        expiration: Date.now() + (expires_in - 20) * 1000
       }
       localStorage.setItem(TOKEN_KEY, JSON.stringify(newToken))
       setAuthLoading(false)
@@ -102,7 +103,7 @@ const Home = () => {
     return <div>Loading...</div>
   }
 
-  if(artistSongs === [] ){
+  if (artistSongs === []) {
     return <div>Loading...</div>
   }
 
@@ -110,21 +111,21 @@ const Home = () => {
 
   const handleSubmit = event => {
     event.preventDefault()
-    localStorage.setItem("selectedGenre", JSON.stringify(selectedGenre))
+    localStorage.setItem('selectedGenre', JSON.stringify(selectedGenre))
     // 👇️ redirect to game screen
-    history.push("/game")
+    history.push('/game')
   }
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <div>
-          Genre:
+          <h2>Chose a genre:</h2>
           <select
             value={selectedGenre}
             onChange={event => setSelectedGenre(event.target.value)}
           >
-            <option value="" />
+            <option value='' />
             {genres.map(genre => (
               <option key={genre} value={genre}>
                 {genre}
@@ -132,17 +133,46 @@ const Home = () => {
             ))}
           </select>
         </div>
-        <ArtistForm />
-        <SongForm />
+        <div>
+          <h2>Select number of songs:</h2>
+          <select
+            value={numSongs}
+            onChange={event => setNumSongs(event.target.value)}
+          >
+            <option value={1}>1</option>
+            <option value={2}>2</option>
+            <option value={3}>3</option>
+            ))
+          </select>
+        </div>
+        <div>
+          <h2>Select number of artists:</h2>
+          <select
+            value={numArtists}
+            onChange={event => setNumArtists(event.target.value)}
+          >
+            <option value={2}>2</option>
+            <option value={3}>3</option>
+            <option value={4}>4</option>
+            ))
+          </select>
+        </div>
+
+        {/* <ArtistForm /> */}
+
+        {/* <SongForm /> */}
         <br />
-        <button  type="submit">
-          P L A Y
-        </button>
+
+        <button type='submit'>P L A Y</button>
       </form>
       <button onClick={() => console.log(selectedGenre)}>Log</button>
       <button onClick={() => setGameData(token)}>Log Tracks</button>
       <button onClick={() => setArtistForGame()}>Get Artist Tracks</button>
-      <button onClick={() => console.log(artistSongs)}>Log Artist Tracks</button>
+      <button onClick={() => console.log(artistSongs)}>
+        Log Artist Tracks
+      </button>
+      <button onClick={() => console.log(numSongs)}> log numSongs</button>
+      <button onClick={() => console.log(numArtists)}> log numArtists</button>
     </div>
   )
 }
