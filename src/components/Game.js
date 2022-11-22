@@ -7,11 +7,13 @@ const AUTH_ENDPOINT =
 const TOKEN_KEY = "whos-who-access-token"
 
 const Game = () => {
+  const [tracks, setTracks] = useState([])
   const [authLoading, setAuthLoading] = useState(false)
   const [configLoading, setConfigLoading] = useState(false)
   const [token, setToken] = useState("")
-  const [tracks, setTracks] = useState([])
-
+  const [artist, setArtist] = useState("")
+  // const [songs, setSongs] = useState([])
+  
   const selectedGenre = JSON.parse(localStorage.getItem('selectedGenre'))
   console.log(selectedGenre)
 
@@ -22,14 +24,24 @@ const Game = () => {
       params: {
         market: "US",
         seed_genres: selectedGenre,
-        limit: 10,
+        limit: 3,
       },
     })
-    // .then(({ artists }) => setArtists(artists))
     setTracks(response.tracks)
+    setArtist(response.tracks[0].artists[0].id)
     console.log(response.tracks)
-    // setConfigLoading(false)
   }
+
+  // const loadSongs = async t => {
+  //   const response = await fetchFromSpotify({
+  //     token: t,
+  //     endpoint: `artists/${artist}/top-tracks`,
+  //   })
+  //   // .then(({ artists }) => setArtists(artists))
+  //   setSongs(response.songs)
+  //   console.log(response.songs)
+  //   // setConfigLoading(false)
+  // }
 
   useEffect(() => {
     setAuthLoading(true)
@@ -42,6 +54,7 @@ const Game = () => {
         setAuthLoading(false)
         setToken(storedToken.value)
         loadTracks(storedToken.value)
+        // loadSongs(storedToken.value)
         return
       }
     }
@@ -55,12 +68,15 @@ const Game = () => {
       setAuthLoading(false)
       setToken(newToken.value)
       loadTracks(newToken.value)
+      // loadSongs(newToken.value)
     })
   }, [])
 
   if (authLoading || configLoading) {
     return <div>Loading...</div>
   }
+
+  console.log('This is the correct artist id: ' + artist)
   
   return (
     <div>
