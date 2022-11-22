@@ -9,14 +9,25 @@ const AUTH_ENDPOINT =
 const TOKEN_KEY = "whos-who-access-token"
 
 const Game = () => {
-  const [tracks, setTracks] = useRecoilState(gameSongsState)
+  const [artistSongs, setArtistSongs] = useRecoilState(gameSongsState)
   const [authLoading, setAuthLoading] = useState(false)
   const [configLoading, setConfigLoading] = useState(false)
   const [token, setToken] = useState("")
-  const [artist, setArtist] = useState("")
+
+  
+
+   const notNullPreviews = []
+
+   //Should destructure tracks for simplicity
+   for(let i = 0; i < artistSongs['tracks'].length; i++){
+    if(artistSongs.tracks[i].preview_url != null){
+      notNullPreviews.push(artistSongs.tracks[i].preview_url)
+    }
+   }
   
   return (
     <div>
+      
       <h2>Round /incremental/</h2>
       <section>
         {/*Buttons will be reworked and rendered through spreading out an array of tracks created by the returned data from 'GET tracks' -- we can make the key for the button element the tracks' ids and button innerHTML will be filled in by whatever values are assigned to variables we name we as required */}
@@ -39,7 +50,11 @@ const Game = () => {
       <section>
         <Score />
       </section>
-      <button onClick={() => console.log(tracks)}>Log Tracks</button>
+      <button onClick={() => console.log(artistSongs)}>Log Artist Tracks</button>
+      <button onClick={() => console.log(artistSongs.tracks[0].preview_url)}>Log preview url</button>
+      <button onClick={() => console.log(notNullPreviews)}>Log Not Null Tracks</button>
+      {/* <button onClick={() => console.log(notNullTracks)}>Log Not Null Tracks</button> */}
+
     </div>
   );
 };

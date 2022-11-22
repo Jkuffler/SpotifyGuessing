@@ -45,7 +45,7 @@ const Home = () => {
       params: {
         market: "US",
         seed_genres: selectedGenre,
-        limit: 10,
+        limit: 20,
       },
     })
     // .then(({ artists }) => setArtists(artists))
@@ -99,6 +99,10 @@ const Home = () => {
   }, [])
 
   if (authLoading || configLoading) {
+    return <div>Loading...</div>
+  }
+
+  if(artistSongs === [] ){
     return <div>Loading...</div>
   }
 
