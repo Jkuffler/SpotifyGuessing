@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Score from "./Score";
 import fetchFromSpotify, { request } from "../services/api";
 import { useRecoilState } from "recoil";
-import { gameSongsState } from "../GlobalState";
+import { gameSongsState, numArtistsState} from "../GlobalState";
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token"
@@ -10,6 +10,7 @@ const TOKEN_KEY = "whos-who-access-token"
 
 const Game = () => {
   const [artistSongs, setArtistSongs] = useRecoilState(gameSongsState)
+  const [numArtists, setNumArtists] = useRecoilState(numArtistsState)
   const [authLoading, setAuthLoading] = useState(false)
   const [configLoading, setConfigLoading] = useState(false)
   const [token, setToken] = useState("")
@@ -53,6 +54,7 @@ const Game = () => {
       <button onClick={() => console.log(artistSongs)}>Log Artist Tracks</button>
       <button onClick={() => console.log(artistSongs.tracks[0].preview_url)}>Log preview url</button>
       <button onClick={() => console.log(notNullPreviews)}>Log Not Null Tracks</button>
+      <button onClick={() => console.log(numArtists)}>Log Global Num Artists</button>
       {/* <button onClick={() => console.log(notNullTracks)}>Log Not Null Tracks</button> */}
 
     </div>

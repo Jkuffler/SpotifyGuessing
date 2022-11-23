@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react"
 import fetchFromSpotify, { request } from "../services/api"
-import ArtistForm from "./ArtistForm"
-import SongForm from "./SongForm"
 import { useHistory } from "react-router-dom"
 import { useRecoilState } from "recoil"
-import { gameSongsState } from "../GlobalState"
+import { gameSongsState, numArtistsState } from "../GlobalState"
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token"
@@ -20,6 +18,7 @@ const Home = () => {
   const [token, setToken] = useState("")
   const [artist, setArtist] = useState("")
   const [artistSongs, setArtistSongs] = useRecoilState(gameSongsState)
+  const [numArtists, setNumArtists] = useRecoilState(numArtistsState)
 
   const loadGenres = async t => {
     setConfigLoading(true)
@@ -132,8 +131,18 @@ const Home = () => {
             ))}
           </select>
         </div>
-        <ArtistForm />
-        <SongForm />
+        <div>
+          Number of Artist Choices:
+          <select
+            value={numArtists}
+            onChange={event => setNumArtists(event.target.value)}
+          >
+            <option value='1'>1</option>
+            <option value='2'>2</option>
+            <option value='3'>3</option>
+            
+          </select>
+        </div>
         <br />
         <button  type="submit">
           P L A Y
@@ -143,6 +152,7 @@ const Home = () => {
       <button onClick={() => setGameData(token)}>Log Tracks</button>
       <button onClick={() => setArtistForGame()}>Get Artist Tracks</button>
       <button onClick={() => console.log(artistSongs)}>Log Artist Tracks</button>
+      <button onClick={() => console.log(numArtists)}>Log Selected Num Artists</button>
     </div>
   )
 }
