@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import fetchFromSpotify, { request } from "../services/api"
 import { useHistory } from "react-router-dom"
 import { useRecoilState } from "recoil"
-import { gameSongsState, numArtistsState } from "../GlobalState"
+import { gameSongsState, numArtistsState, numSongsState, selectedGenreState } from "../GlobalState"
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token"
@@ -10,7 +10,7 @@ const TOKEN_KEY = "whos-who-access-token"
 
 const Home = () => {
   const [genres, setGenres] = useState([])
-  const [selectedGenre, setSelectedGenre] = useState("rock")
+  const [selectedGenre, setSelectedGenre] = useRecoilState(selectedGenreState)
   const [tracks, setTracks] = useState([])
   const [selectedTrack, setSelectedTrack] = useState("")
   const [authLoading, setAuthLoading] = useState(false)
@@ -19,6 +19,7 @@ const Home = () => {
   const [artist, setArtist] = useState("")
   const [artistSongs, setArtistSongs] = useRecoilState(gameSongsState)
   const [numArtists, setNumArtists] = useRecoilState(numArtistsState)
+  const [numSongs, setNumSongs] = useRecoilState(numSongsState)
 
   const loadGenres = async t => {
     setConfigLoading(true)
@@ -109,8 +110,7 @@ const Home = () => {
 
   const handleSubmit = event => {
     event.preventDefault()
-    localStorage.setItem("selectedGenre", JSON.stringify(selectedGenre))
-    // 👇️ redirect to game screen
+    // 👇️ redirect to game screen on pressing play
     history.push("/game")
   }
 
@@ -137,6 +137,18 @@ const Home = () => {
             value={numArtists}
             onChange={event => setNumArtists(event.target.value)}
           >
+            <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
+            
+          </select>
+        </div>
+        <div>
+          Number of Song Choices:
+          <select
+            value={numArtists}
+            onChange={event => setNumSongs(event.target.value)}
+          >
             <option value='1'>1</option>
             <option value='2'>2</option>
             <option value='3'>3</option>
@@ -153,6 +165,7 @@ const Home = () => {
       <button onClick={() => setArtistForGame()}>Get Artist Tracks</button>
       <button onClick={() => console.log(artistSongs)}>Log Artist Tracks</button>
       <button onClick={() => console.log(numArtists)}>Log Selected Num Artists</button>
+      <button onClick={() => console.log(numSongs)}>Log Selected Num Songs</button>
     </div>
   )
 }
