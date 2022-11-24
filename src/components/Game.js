@@ -1,62 +1,125 @@
 import React, { useEffect, useState } from "react";
-import Score from "./Score";
 import fetchFromSpotify, { request } from "../services/api";
 import { useRecoilState } from "recoil";
-import { gameSongsState, numArtistsState} from "../GlobalState";
+import { selectedArtistSongsState, notNullPreviewsState, numSongsState, selectedArtistState, selectedGenreState, tracksState, selectedArtistNameState } from "../GlobalState";
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token"
 const TOKEN_KEY = "whos-who-access-token"
 
 const Game = () => {
-  const [artistSongs, setArtistSongs] = useRecoilState(gameSongsState)
-  const [numArtists, setNumArtists] = useRecoilState(numArtistsState)
+  const [selectedGenre, setSelectedGenre] = useRecoilState(selectedGenreState) 
+  const [tracks, setTracks] = useRecoilState(tracksState)
+  const [selectedArtist, setSelectedArtist] = useRecoilState(selectedArtistState)
+  const [selectedArtistSongs, setSelectedArtistSongs] = useRecoilState(selectedArtistSongsState)
+  const [selectedArtistName, setSelectedArtistName] = useRecoilState(selectedArtistNameState)
+  const [notNullPreviews, setNotNullPreviews] = useRecoilState(notNullPreviewsState)
+  const [numSongs, setNumSongs] = useRecoilState(numSongsState)
   const [authLoading, setAuthLoading] = useState(false)
   const [configLoading, setConfigLoading] = useState(false)
   const [token, setToken] = useState("")
 
-  
+  // Loads random tracks and saves it using Recoil
+  const loadTracks = async t => {
+    setConfigLoading(true)
+    const response = await fetchFromSpotify({
+      token: t,
+      endpoint: "recommendations",
+      params: {
+        market: "US",
+        seed_genres: selectedGenre,
+        limit: 20,
+      },
+    })
+    setTracks(response.tracks)
 
-   const notNullPreviews = []
-
-   //Should destructure tracks for simplicity
-   for(let i = 0; i < artistSongs['tracks'].length; i++){
-    if(artistSongs.tracks[i].preview_url != null){
-      notNullPreviews.push(artistSongs.tracks[i].preview_url)
+    //Decreases the chance of getting an empty or less than numSongs previews array
+    let artistWithPreviews = ''
+    let targetArtistName = ''
+    for(let i = 0; i < response.tracks.length; i++){
+      if(response.tracks[i].preview_url != null){
+        artistWithPreviews = response.tracks[i].artists[0].id
+        targetArtistName = response.tracks[i].artists[0].name
+        break;
+      }
     }
-   }
+    const targetArtist = artistWithPreviews 
+    const selectedTargetArtistName = targetArtistName    
+    setSelectedArtist(targetArtist)                       
+    setSelectedArtistName(selectedTargetArtistName)
+    setConfigLoading(false)
+    loadArtistSongs(t, targetArtist)
+  }
+
+  // Loads selected artist's songs and saves those songs and previews to be used for play buttons
+  const loadArtistSongs = async (t, artist) => {
+    const response = await fetchFromSpotify({
+      token: t,
+      endpoint: `artists/${artist}/top-tracks`,
+      params: {
+        market: "US"
+      },
+    })
+    setSelectedArtistSongs(response)
+    let newNotNullPreviews = []
+    for(let i = 0; i < response.tracks.length; i++){
+      if(response.tracks[i].preview_url != null){
+        newNotNullPreviews.push(response.tracks[i].preview_url)
+      }
+    }
+    setNotNullPreviews(newNotNullPreviews)
+  }
+
+  useEffect(() => {
+    setAuthLoading(true)
+
+    const storedTokenString = localStorage.getItem(TOKEN_KEY)
+    if (storedTokenString) {
+      const storedToken = JSON.parse(storedTokenString)
+      if (storedToken.expiration > Date.now()) {
+        console.log("Token found in localstorage")
+        setAuthLoading(false)
+        setToken(storedToken.value)
+        loadTracks(storedToken.value)
+      }
+    }
+    console.log("Sending request to AWS endpoint")
+    request(AUTH_ENDPOINT).then(({ access_token, expires_in }) => {
+      const newToken = {
+        value: access_token,
+        expiration: Date.now() + (expires_in - 20) * 1000,
+      }
+      localStorage.setItem(TOKEN_KEY, JSON.stringify(newToken))
+      setAuthLoading(false)
+      setToken(newToken.value)
+      loadTracks(newToken.value)
+    })
+  }, [])
+
+  if (authLoading || configLoading) {
+    return <div>Loading...</div>
+  }
+
+  // let guessCounter = 3
+  // if(selectedArtist != gameArtist){
+  //  guessCounter--
+  //  if (guessCounter === 0){ game over }
+ // }
+ // if(selectedArtist === gameArtist){ you win }
   
+ // Test Buttons
   return (
     <div>
-      
-      <h2>Round /incremental/</h2>
-      <section>
-        {/*Buttons will be reworked and rendered through spreading out an array of tracks created by the returned data from 'GET tracks' -- we can make the key for the button element the tracks' ids and button innerHTML will be filled in by whatever values are assigned to variables we name we as required */}
-        <button className="artistBtn"> Gary </button>
-        <button className="artistBtn"> Axel </button>
-        <button className="artistBtn"> Tres </button>
-        <button className="artistBtn"> Botch </button>
-      </section>
-      <br />
-      <section>
-        {/* Tracks will also be refactored accordingly */}
-        <button className="trackBtn"> P L A Y </button>
-        <button className="trackBtn"> P L A Y </button>
-        <button className="trackBtn"> P L A Y </button>
-      </section>
-      <br />
-      <section>
-        <button className="nextBtn"> N E X T </button>
-      </section>
-      <section>
-        <Score />
-      </section>
-      <button onClick={() => console.log(artistSongs)}>Log Artist Tracks</button>
-      <button onClick={() => console.log(artistSongs.tracks[0].preview_url)}>Log preview url</button>
-      <button onClick={() => console.log(notNullPreviews)}>Log Not Null Tracks</button>
-      <button onClick={() => console.log(numArtists)}>Log Global Num Artists</button>
-      {/* <button onClick={() => console.log(notNullTracks)}>Log Not Null Tracks</button> */}
-
+      <h2>Game Page</h2>
+      <button onClick={() => console.log(selectedGenre)}>Log Selected Genre</button>
+      <button onClick={() => console.log(tracks)}>Log Loaded Tracks</button>
+      <button onClick={() => console.log(selectedArtist)}>Log Selected Artist</button>
+      <button onClick={() => console.log(selectedArtistName)}>Log Selected Artist Name</button>
+      <button onClick={() => console.log(selectedArtistSongs)}>Log Artist Tracks</button>
+      <button onClick={() => console.log(selectedArtistSongs.tracks[0].preview_url)}>Log preview url</button>
+      <button onClick={() => console.log(notNullPreviews)}>Log preview url list</button>
+      <button onClick={() => console.log(notNullPreviews.length)}>Log length of notNullPreviews</button>
+      <button onClick={() => console.log(numSongs)}>Log Number of songs to listen</button>
     </div>
   );
 };
