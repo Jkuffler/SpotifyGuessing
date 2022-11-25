@@ -1,7 +1,19 @@
 import React, { useEffect, useState } from "react";
+import ArtistChoices from "./ArtistChoices";
 import fetchFromSpotify, { request } from "../services/api";
 import { useRecoilState } from "recoil";
-import { selectedArtistSongsState, notNullPreviewsState, numSongsState, selectedArtistState, selectedGenreState, tracksState, selectedArtistNameState } from "../GlobalState";
+import {
+  selectedArtistSongsState,
+  notNullPreviewsState,
+  numSongsState,
+  selectedArtistState,
+  selectedGenreState,
+  tracksState,
+  selectedArtistNameState,
+  guessCounterState,
+  numArtistsState,
+} from "../GlobalState";
+import PlaySongButtons from "./PlaySongButtons";
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token"
@@ -15,6 +27,8 @@ const Game = () => {
   const [selectedArtistName, setSelectedArtistName] = useRecoilState(selectedArtistNameState)
   const [notNullPreviews, setNotNullPreviews] = useRecoilState(notNullPreviewsState)
   const [numSongs, setNumSongs] = useRecoilState(numSongsState)
+  const [numArtists, setNumArtists] = useRecoilState(numArtistsState)
+  const [guessCounter, setGuessCounter] = useRecoilState(guessCounterState)
   const [authLoading, setAuthLoading] = useState(false)
   const [configLoading, setConfigLoading] = useState(false)
   const [token, setToken] = useState("")
@@ -68,6 +82,8 @@ const Game = () => {
       }
     }
     setNotNullPreviews(newNotNullPreviews)
+    const actualGuessCounter = numArtists - 1
+    setGuessCounter(actualGuessCounter)
   }
 
   useEffect(() => {
@@ -99,13 +115,6 @@ const Game = () => {
   if (authLoading || configLoading) {
     return <div>Loading...</div>
   }
-
-  // let guessCounter = 3
-  // if(selectedArtist != gameArtist){
-  //  guessCounter--
-  //  if (guessCounter === 0){ game over }
- // }
- // if(selectedArtist === gameArtist){ you win }
   
  // Test Buttons
   return (
@@ -120,6 +129,8 @@ const Game = () => {
       <button onClick={() => console.log(notNullPreviews)}>Log preview url list</button>
       <button onClick={() => console.log(notNullPreviews.length)}>Log length of notNullPreviews</button>
       <button onClick={() => console.log(numSongs)}>Log Number of songs to listen</button>
+      <PlaySongButtons/>
+      <ArtistChoices/>
     </div>
   );
 };

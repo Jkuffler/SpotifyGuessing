@@ -40,3 +40,8 @@ export const selectedArtistNameState = atom({
     key: "selectedArtistNameState",
     default: ""
 })
+
+export const guessCounterState = atom({
+    key: "guessCounterState",
+    default: 3
+})
