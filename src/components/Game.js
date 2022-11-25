@@ -131,6 +131,7 @@ const Game = () => {
       <button onClick={() => console.log(numSongs)}>Log Number of songs to listen</button>
       <PlaySongButtons/>
       <ArtistChoices/>
+      <p>Guess Counter: {guessCounter}</p>
     </div>
   );
 };
