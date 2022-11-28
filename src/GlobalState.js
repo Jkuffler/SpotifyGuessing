@@ -45,3 +45,13 @@ export const guessCounterState = atom({
     key: "guessCounterState",
     default: 3
 })
+
+export const artistNamesState = atom({
+    key: "artistNamesState",
+    default: 3
+})
+
+export const artistNamesForGameState = atom({
+    key: "artistNamesForGameState",
+    default: []
+})

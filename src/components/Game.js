@@ -12,8 +12,11 @@ import {
   selectedArtistNameState,
   guessCounterState,
   numArtistsState,
+  artistNamesState,
 } from "../GlobalState";
 import PlaySongButtons from "./PlaySongButtons";
+
+import { SpinnerOverlay, SpinnerContainer, Song, Guess, Choice } from './Button.jsx'
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token"
@@ -25,6 +28,7 @@ const Game = () => {
   const [selectedArtist, setSelectedArtist] = useRecoilState(selectedArtistState)
   const [selectedArtistSongs, setSelectedArtistSongs] = useRecoilState(selectedArtistSongsState)
   const [selectedArtistName, setSelectedArtistName] = useRecoilState(selectedArtistNameState)
+  const [artistNames, setArtistNames] = useRecoilState(artistNamesState)
   const [notNullPreviews, setNotNullPreviews] = useRecoilState(notNullPreviewsState)
   const [numSongs, setNumSongs] = useRecoilState(numSongsState)
   const [numArtists, setNumArtists] = useRecoilState(numArtistsState)
@@ -50,6 +54,7 @@ const Game = () => {
     //Decreases the chance of getting an empty or less than numSongs previews array
     let artistWithPreviews = ''
     let targetArtistName = ''
+    let artistNames = []
     for(let i = 0; i < response.tracks.length; i++){
       if(response.tracks[i].preview_url != null){
         artistWithPreviews = response.tracks[i].artists[0].id
@@ -57,10 +62,20 @@ const Game = () => {
         break;
       }
     }
-    const targetArtist = artistWithPreviews 
-    const selectedTargetArtistName = targetArtistName    
-    setSelectedArtist(targetArtist)                       
+
+    const targetArtist = artistWithPreviews
+    const selectedTargetArtistName = targetArtistName
+    setSelectedArtist(targetArtist)
     setSelectedArtistName(selectedTargetArtistName)
+
+    for(let i = 0; i < 5; i++){
+      if(!artistNames.includes(selectedTargetArtistName)){
+        artistNames.push(selectedTargetArtistName)
+      }else if(response.tracks[i].artists[0].name != selectedTargetArtistName){
+        artistNames.push(response.tracks[i].artists[0].name)
+      }
+    }
+    setArtistNames(artistNames)
     setConfigLoading(false)
     loadArtistSongs(t, targetArtist)
   }
@@ -113,25 +128,25 @@ const Game = () => {
   }, [])
 
   if (authLoading || configLoading) {
-    return <div>Loading...</div>
+    return (
+      <SpinnerOverlay>
+          <SpinnerContainer/>
+      </SpinnerOverlay>
+    );
   }
   
  // Test Buttons
   return (
     <div>
-      <h2>Game Page</h2>
-      <button onClick={() => console.log(selectedGenre)}>Log Selected Genre</button>
-      <button onClick={() => console.log(tracks)}>Log Loaded Tracks</button>
-      <button onClick={() => console.log(selectedArtist)}>Log Selected Artist</button>
-      <button onClick={() => console.log(selectedArtistName)}>Log Selected Artist Name</button>
-      <button onClick={() => console.log(selectedArtistSongs)}>Log Artist Tracks</button>
-      <button onClick={() => console.log(selectedArtistSongs.tracks[0].preview_url)}>Log preview url</button>
-      <button onClick={() => console.log(notNullPreviews)}>Log preview url list</button>
-      <button onClick={() => console.log(notNullPreviews.length)}>Log length of notNullPreviews</button>
-      <button onClick={() => console.log(numSongs)}>Log Number of songs to listen</button>
-      <PlaySongButtons/>
-      <ArtistChoices/>
-      <p>Guess Counter: {guessCounter}</p>
+      <Guess>
+        <p>Guesses Left: {guessCounter}</p>
+      </Guess>
+        <Song>
+          <PlaySongButtons/>
+        </Song>
+        <Choice>
+          <ArtistChoices/>
+        </Choice>
     </div>
   );
 };

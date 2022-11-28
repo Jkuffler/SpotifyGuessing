@@ -3,6 +3,7 @@ import fetchFromSpotify, { request } from "../services/api"
 import { useHistory } from "react-router-dom"
 import { useRecoilState } from "recoil"
 import { gameSongsState, numArtistsState, numSongsState, selectedGenreState } from "../GlobalState"
+import { SelectOption, SubmitPlayButton, SelectOptionForm, Selection, SelectionOption } from './Button.jsx'
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token"
@@ -67,53 +68,50 @@ const Home = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <SelectOptionForm onSubmit={handleSubmit}>
+        <SelectOption>
           Genre:
-          <select
+          <Selection
             value={selectedGenre}
             onChange={event => setSelectedGenre(event.target.value)}
           >
-            <option value="" />
+            <SelectionOption value="" />
             {genres.map(genre => (
-              <option key={genre} value={genre}>
-                {genre}
-              </option>
+              <SelectionOption key={genre} value={genre}>
+                {genre.toUpperCase()}
+              </SelectionOption>
             ))}
-          </select>
-        </div>
-        <div>
+          </Selection>
+        </SelectOption>
+        <SelectOption>
           Number of Songs To Listen To:
-          <select
+          <Selection
             value={numSongs}
             onChange={event => setNumSongs(event.target.value)}
           >
-            <option value='1'>1</option>
-            <option value='2'>2</option>
-            <option value='3'>3</option>
+            <SelectionOption value='1'>1</SelectionOption>
+            <SelectionOption value='2'>2</SelectionOption>
+            <SelectionOption value='3'>3</SelectionOption>
 
-          </select>
-        </div>
-        <div>
+          </Selection>
+        </SelectOption>
+        <SelectOption>
           Number of Artist Choices:
-          <select
+          <Selection
             value={numArtists}
             onChange={event => setNumArtists(event.target.value)}
           >
-            <option value='2'>2</option>
-            <option value='3'>3</option>
-            <option value='4'>4</option>
+            <SelectionOption value='2'>2</SelectionOption>
+            <SelectionOption value='3'>3</SelectionOption>
+            <SelectionOption value='4'>4</SelectionOption>
 
-          </select>
-        </div>
-        <br />
-        <button  type="submit">
+          </Selection>
+        </SelectOption>
+
+        <SubmitPlayButton type="submit">
           P L A Y
-        </button>
-      </form>
-      <button onClick={() => console.log(selectedGenre)}>Log Selected Genre</button>
-      <button onClick={() => console.log(numSongs)}>Log # of Songs To Listen To</button>
-      <button onClick={() => console.log(numArtists)}>Log # of Artists Set</button>
+        </SubmitPlayButton>
+      </SelectOptionForm>
     </div>
   )
 }
