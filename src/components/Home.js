@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import fetchFromSpotify, { request } from "../services/api"
 import { useHistory } from "react-router-dom"
 import { useRecoilState } from "recoil"
-import { gameSongsState, numArtistsState, numSongsState, selectedGenreState } from "../GlobalState"
+import { numArtistsState, numSongsState, selectedGenreState } from "../GlobalState"
 import { SelectOption, SubmitPlayButton, SelectOptionForm, Selection, SelectionOption } from './Button.jsx'
 
 const AUTH_ENDPOINT =
