@@ -1,5 +1,8 @@
 body {
+<<<<<<< HEAD
   font-family: 'Genos';
+=======
+>>>>>>> 5e415ca1f59f8041fba011c4dcb8b11ddfbe907f
   background-image: url(./src/asset/background.jpg);
 }
 
@@ -7,6 +10,7 @@ form {
   text-align: center;
   border: 1px solid black;
   border-radius: 50px;
+<<<<<<< HEAD
   /* margin:  200px 200px 200px;*/
   margin: 40%;
 }
@@ -62,4 +66,7 @@ div #song #choice #guess {
   margin-right: 30%;
   margin-left: 30%; */
   margin: 25%;
+=======
+  margin: 200px 200px 200px 200px;
+>>>>>>> 5e415ca1f59f8041fba011c4dcb8b11ddfbe907f
 }

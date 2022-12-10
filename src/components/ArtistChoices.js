@@ -3,7 +3,6 @@ import { ArtistChoice } from "./Button.jsx";
 import { useHistory } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import {
-  artistNamesForGameState,
   artistNamesState,
   guessCounterState,
   numArtistsState,
