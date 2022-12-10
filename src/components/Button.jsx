@@ -5,7 +5,7 @@ text-align: center;
 border: 1px solid black;
 border-radius: 50px;
 margin: 200px 200px 200px 200px;
-background-image: linear-gradient(-20deg, #00cdac 0%, #8ddad5 100%);
+/* background-image: linear-gradient(-20deg, #00cdac 0%, #8ddad5 100%); */
 `
 export const SelectionOption = styled.option`
 text-align: center;
