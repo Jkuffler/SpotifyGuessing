@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const SelectOptionForm = styled.form`
+export const RoundSettings = styled.form`
 text-align: center;
 border: 1px solid black;
 border-radius: 50px;

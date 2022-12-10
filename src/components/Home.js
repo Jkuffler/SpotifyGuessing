@@ -3,7 +3,7 @@ import fetchFromSpotify, { request } from "../services/api"
 import { useHistory } from "react-router-dom"
 import { useRecoilState } from "recoil"
 import { numArtistsState, numSongsState, selectedGenreState } from "../GlobalState"
-import { SelectOption, SubmitPlayButton, SelectOptionForm, Selection, SelectionOption } from './Button.jsx'
+import { SelectOption, SubmitPlayButton, RoundSettings, Selection, SelectionOption } from './Button.jsx'
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token"
@@ -68,7 +68,7 @@ const Home = () => {
 
   return (
     <div>
-      <SelectOptionForm onSubmit={handleSubmit}>
+      <RoundSettings onSubmit={handleSubmit}>
         <SelectOption>
           Genre:
           <Selection
@@ -84,7 +84,7 @@ const Home = () => {
           </Selection>
         </SelectOption>
         <SelectOption>
-          Number of Songs To Listen To:
+          Number of Songs:
           <Selection
             value={numSongs}
             onChange={event => setNumSongs(event.target.value)}
@@ -96,7 +96,7 @@ const Home = () => {
           </Selection>
         </SelectOption>
         <SelectOption>
-          Number of Artist Choices:
+          Number of Artists:
           <Selection
             value={numArtists}
             onChange={event => setNumArtists(event.target.value)}
@@ -111,7 +111,7 @@ const Home = () => {
         <SubmitPlayButton type="submit">
           P L A Y
         </SubmitPlayButton>
-      </SelectOptionForm>
+      </RoundSettings>
     </div>
   )
 }
