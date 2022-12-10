@@ -1,0 +1,65 @@
+body {
+  font-family: 'Genos';
+  background-image: url(./src/asset/background.jpg);
+}
+
+form {
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 50px;
+  /* margin:  200px 200px 200px;*/
+  margin: 40%;
+}
+
+option {
+  text-align: center;
+  border-radius: 0.5em;
+}
+
+select {
+  border-radius: 15px;
+  font-size: 0.75em;
+  /* width: 250px;
+  height: 50px; */
+  font-family: 'Genos';
+}
+
+div .option {
+  text-align: center;
+  font-size: 0.75em;
+  margin-top: 1em;
+  font-family: 'Genos';
+}
+
+button #submit {
+  border-radius: 0.25em;
+  font-family: 'Genos';
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  color: black;
+  background-color: rgb(0, 237, 47);
+  position: flex;
+}
+
+button #song #artist {
+  justify-content: center;
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 50px;
+  margin: 10px 10px 10px 10px;
+  color: black;
+  background-color: white;
+  position: flex;
+  visibility: hidden; /* need to find this attribute on the element in the component in order to toggle*/
+}
+
+div #song #choice #guess {
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 50px;
+  /* margin: 10px 70px 10px 70px;
+  margin-bottom: 10%;
+  margin-right: 30%;
+  margin-left: 30%; */
+  margin: 25%;
+}

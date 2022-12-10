@@ -16,7 +16,7 @@ border-radius: 15px;
 font-size: 25px;
 width: 250px;
 height: 50px;
-font-family: Roboto;
+font-family: Genos;
 `
 
 
@@ -24,13 +24,13 @@ export const SelectOption = styled.div`
 text-align: center;
 font-size: 50px;
 margin-top: 30px;
-font-family: Roboto;
+font-family: Genos;
 `
 
 export const SubmitPlayButton = styled.button`
 border-radius: 15px;
 border: none;
-font-family: Roboto;
+font-family: Genos;
 font-size: 65px;
 margin-top: 100px;
 margin-bottom: 50px;
@@ -138,7 +138,7 @@ text-align: center;
         background-image: linear-gradient(-20deg, #00cdac 0%, #8ddad5 100%);
         
         p {
-            font-family: Roboto;
+            font-family: Genos;
         }
 
         button {
@@ -166,7 +166,7 @@ text-align: center;
         background-image: linear-gradient(-20deg, #00cdac 0%, #8ddad5 100%);
         
         p {
-            font-family: Roboto;
+            font-family: Genos;
         }
 
         button {
