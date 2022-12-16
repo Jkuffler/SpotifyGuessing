@@ -3,7 +3,6 @@ import fetchFromSpotify, { request } from "../services/api"
 import { useHistory } from "react-router-dom"
 import { useRecoilState } from "recoil"
 import { numArtistsState, numSongsState, selectedGenreState } from "../GlobalState"
-import { SelectOption, SubmitPlayButton, RoundSettings, Selection, SelectionOption } from './Button.jsx'
 
 const AUTH_ENDPOINT =
   "https://nuod0t2zoe.execute-api.us-east-2.amazonaws.com/FT-Classroom/spotify-auth-token"
@@ -68,50 +67,50 @@ const Home = () => {
 
   return (
     <div>
-      <RoundSettings onSubmit={handleSubmit}>
-        <SelectOption>
+      <form onSubmit={handleSubmit}>
+        <section>
           Genre:
-          <Selection
+          <select
             value={selectedGenre}
             onChange={event => setSelectedGenre(event.target.value)}
           >
-            <SelectionOption value="" />
+            <option value="" />
             {genres.map(genre => (
-              <SelectionOption key={genre} value={genre}>
+              <option key={genre} value={genre}>
                 {genre.toUpperCase()}
-              </SelectionOption>
+              </option>
             ))}
-          </Selection>
-        </SelectOption>
-        <SelectOption>
+          </select>
+        </section>
+        <section>
           Number of Songs:
-          <Selection
+          <select
             value={numSongs}
             onChange={event => setNumSongs(event.target.value)}
           >
-            <SelectionOption value='1'>1</SelectionOption>
-            <SelectionOption value='2'>2</SelectionOption>
-            <SelectionOption value='3'>3</SelectionOption>
+            <option value='1'>1</option>
+            <option value='2'>2</option>
+            <option value='3'>3</option>
 
-          </Selection>
-        </SelectOption>
-        <SelectOption>
+          </select>
+        </section>
+        <section>
           Number of Artists:
-          <Selection
+          <select
             value={numArtists}
             onChange={event => setNumArtists(event.target.value)}
           >
-            <SelectionOption value='2'>2</SelectionOption>
-            <SelectionOption value='3'>3</SelectionOption>
-            <SelectionOption value='4'>4</SelectionOption>
+            <option value='2'>2</option>
+            <option value='3'>3</option>
+            <option value='4'>4</option>
 
-          </Selection>
-        </SelectOption>
+          </select>
+        </section>
 
-        <SubmitPlayButton type="submit">
+        <button type="submit">
           P L A Y
-        </SubmitPlayButton>
-      </RoundSettings>
+        </button>
+      </form>
     </div>
   )
 }

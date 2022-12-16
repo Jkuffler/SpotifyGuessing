@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from "react-router-dom";
-import { Loser } from './Button.jsx';
+// import { Loser } from './Button.jsx';
 
 const Lose = () => {
     const history = useHistory()

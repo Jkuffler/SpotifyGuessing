@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-
+import '../style.css'
 import Home from './Home'
 import Game from './Game'
 import Win from './Win'
